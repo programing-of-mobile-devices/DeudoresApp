@@ -1,0 +1,2 @@
+rootProject.name = "DeudoresApp"
+include ':app'
