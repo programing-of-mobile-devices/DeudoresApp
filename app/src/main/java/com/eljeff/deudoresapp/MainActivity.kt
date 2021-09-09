@@ -12,6 +12,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 class MainActivity : AppCompatActivity() {
 
     //Hola develop
+    //Hola firebase
 
     private lateinit var binding: ActivityMainBinding
 
