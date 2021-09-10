@@ -8,6 +8,7 @@ import com.eljeff.deudoresapp.R
 import com.eljeff.deudoresapp.data.local.entities.Debtor
 import com.eljeff.deudoresapp.data.server.DebtorServer
 import com.eljeff.deudoresapp.databinding.CardViewDebtorsItemBinding
+import com.squareup.picasso.Picasso
 
 class DebtorsAdapter(
     private val onItemClicked: (DebtorServer) -> Unit,
@@ -50,6 +51,9 @@ class DebtorsAdapter(
             with(binding){
                 nameCardVwTxVw.text = debtor.name
                 debtCardVwTxVw.text = debtor.debt.toString()
+                if(debtor.urlPicture != null){
+                    Picasso.get().load(debtor.urlPicture).into(pictureImgVw)
+                }
             }
         }
     }
