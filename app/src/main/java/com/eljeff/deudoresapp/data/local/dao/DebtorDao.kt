@@ -1,7 +1,7 @@
-package com.eljeff.deudoresapp.data.dao
+package com.eljeff.deudoresapp.data.local.dao
 
 import androidx.room.*
-import com.eljeff.deudoresapp.data.entities.Debtor
+import com.eljeff.deudoresapp.data.local.entities.Debtor
 
 @Dao
 interface DebtorDao {

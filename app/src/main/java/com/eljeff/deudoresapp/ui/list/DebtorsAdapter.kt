@@ -5,14 +5,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.eljeff.deudoresapp.R
-import com.eljeff.deudoresapp.data.entities.Debtor
+import com.eljeff.deudoresapp.data.local.entities.Debtor
+import com.eljeff.deudoresapp.data.server.DebtorServer
 import com.eljeff.deudoresapp.databinding.CardViewDebtorsItemBinding
 
 class DebtorsAdapter(
-    private val onItemClicked: (Debtor) -> Unit,
+    private val onItemClicked: (DebtorServer) -> Unit,
 ): RecyclerView.Adapter<DebtorsAdapter.ViewHolder>() {
 
-    private var ListDebtor: MutableList<Debtor> = mutableListOf()
+    private var ListDebtor: MutableList<DebtorServer> = mutableListOf()
 
     // me dice cual car view o layout quiero pintar
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -34,7 +35,7 @@ class DebtorsAdapter(
         return ListDebtor.size
     }
 
-    fun appendItems(newItems: MutableList<Debtor>){
+    fun appendItems(newItems: MutableList<DebtorServer>){
         ListDebtor.clear()
         ListDebtor.addAll(newItems)
         notifyDataSetChanged()
@@ -45,7 +46,7 @@ class DebtorsAdapter(
 
         private val binding = CardViewDebtorsItemBinding.bind(view)
 
-        fun bind(debtor: Debtor){
+        fun bind(debtor: DebtorServer){
             with(binding){
                 nameCardVwTxVw.text = debtor.name
                 debtCardVwTxVw.text = debtor.debt.toString()

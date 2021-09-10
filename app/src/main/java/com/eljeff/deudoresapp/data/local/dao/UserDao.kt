@@ -1,9 +1,9 @@
-package com.eljeff.deudoresapp.data.dao
+package com.eljeff.deudoresapp.data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.eljeff.deudoresapp.data.entities.User
+import com.eljeff.deudoresapp.data.local.entities.User
 
 @Dao
 interface UserDao {

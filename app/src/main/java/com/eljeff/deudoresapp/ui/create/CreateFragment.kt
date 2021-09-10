@@ -7,9 +7,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.eljeff.deudoresapp.DeudoresApp
-import com.eljeff.deudoresapp.data.dao.DebtorDao
-import com.eljeff.deudoresapp.data.entities.Debtor
+import com.eljeff.deudoresapp.data.local.dao.DebtorDao
+import com.eljeff.deudoresapp.data.local.entities.Debtor
+import com.eljeff.deudoresapp.data.server.DebtorServer
 import com.eljeff.deudoresapp.databinding.FragmentCreateBinding
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import java.sql.Types.NULL
 
 
@@ -46,10 +49,31 @@ class CreateFragment : Fragment() {
                 val debt = debtEdTx.text.toString().toLong()
 
                 // funcion para crear usuario
-                createDebtor(name, phone, debt)
+                //createDebtor(name, phone, debt)
+                createDebtorServer(name, phone, debt)
             }
         }
         return root
+    }
+
+    private fun createDebtorServer(name: String, phone: String, debt: Long) {
+
+        // instanciamos la base de datos en firebase
+        val db = Firebase.firestore
+        // se hubica el documento en la colección
+        val document = db.collection("deudores").document()
+        // genera un nuevo id
+        val id = document.id
+
+        //creamos el dudor
+        val debtorServer = DebtorServer(id, name, phone, debt)
+
+        // agregamos los datos del nuevo deudor al servidor
+        db.collection("deudores").document(id).set(debtorServer)
+
+        cleanViews()
+
+
     }
 
     private fun createDebtor(name: String, phone: String, debt: Long) {

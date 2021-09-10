@@ -3,7 +3,7 @@ package com.eljeff.deudoresapp
 import android.app.Application
 import androidx.room.Room
 
-import com.eljeff.deudoresapp.data.DebtorDatabase
+import com.eljeff.deudoresapp.data.local.DebtorDatabase
 
 class DeudoresApp: Application() {
 

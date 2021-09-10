@@ -1,6 +1,7 @@
 package com.eljeff.deudoresapp.ui.list
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,9 +10,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.eljeff.deudoresapp.DeudoresApp
-import com.eljeff.deudoresapp.data.dao.DebtorDao
-import com.eljeff.deudoresapp.data.entities.Debtor
+import com.eljeff.deudoresapp.data.local.dao.DebtorDao
+import com.eljeff.deudoresapp.data.local.entities.Debtor
+import com.eljeff.deudoresapp.data.server.DebtorServer
 import com.eljeff.deudoresapp.databinding.FragmentListBinding
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.ktx.Firebase
 
 class ListFragment : Fragment() {
 
@@ -48,17 +53,38 @@ class ListFragment : Fragment() {
             setHasFixedSize(false)
         }
 
-        val deptorDao: DebtorDao = DeudoresApp.database.DebtorDao()
-        val listDebtors: MutableList<Debtor> = deptorDao.getDebtors()
+        // carga la información de la base de datos
 
-        debtorsAdapter.appendItems(listDebtors)
+        //loadFromLocal()
+
+        loadFromServer()
 
         return root
     }
 
-    private fun onDebtorItemClicked(debtor: Debtor) {
+    private fun loadFromServer() {
+        val db = Firebase.firestore
+        db.collection("deudores").get().addOnSuccessListener { result ->
+
+            var listDebtors: MutableList<DebtorServer> = arrayListOf()
+
+            for (document in result){
+                listDebtors.add(document.toObject<DebtorServer>())
+            }
+            debtorsAdapter.appendItems(listDebtors)
+        }
+    }
+
+    private fun loadFromLocal() {
+        val deptorDao: DebtorDao = DeudoresApp.database.DebtorDao()
+        val listDebtors: MutableList<Debtor> = deptorDao.getDebtors()
+        // se agregan deudores a la lista
+        //debtorsAdapter.appendItems(listDebtors)
+    }
+
+    private fun onDebtorItemClicked(debtor: DebtorServer) {
         // me leva al fragmento detail y le manda la info del debtor
-        findNavController().navigate(ListFragmentDirections.actionNavigationListToDetailFragment(debtor = debtor))
+        //findNavController().navigate(ListFragmentDirections.actionNavigationListToDetailFragment(debtor = debtor))
     }
 
     override fun onDestroyView() {

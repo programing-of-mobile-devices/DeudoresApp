@@ -1,12 +1,11 @@
 package com.eljeff.deudoresapp
 
 import android.content.Intent
-import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.eljeff.deudoresapp.data.dao.UserDao
-import com.eljeff.deudoresapp.data.entities.User
+import com.eljeff.deudoresapp.data.local.dao.UserDao
+import com.eljeff.deudoresapp.data.local.entities.User
 import com.eljeff.deudoresapp.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {

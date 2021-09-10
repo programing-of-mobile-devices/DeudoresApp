@@ -4,16 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.eljeff.deudoresapp.DeudoresApp
 import com.eljeff.deudoresapp.R
-import com.eljeff.deudoresapp.data.dao.DebtorDao
-import com.eljeff.deudoresapp.data.entities.Debtor
+import com.eljeff.deudoresapp.data.local.dao.DebtorDao
+import com.eljeff.deudoresapp.data.local.entities.Debtor
+import com.eljeff.deudoresapp.data.server.DebtorServer
 import com.eljeff.deudoresapp.databinding.FragmentReadBinding
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.ktx.Firebase
 
 class ReadFragment : Fragment() {
 
@@ -42,11 +44,32 @@ class ReadFragment : Fragment() {
 
         // código de lectura
         binding.searchButton.setOnClickListener {
-            readDebtors(binding.searchNameEdTx.text.toString())
+            //readDebtors(binding.searchNameEdTx.text.toString())
+            readDebtorsFromServer(binding.searchNameEdTx.text.toString())
         }
 
 
         return root
+    }
+
+    private fun readDebtorsFromServer(name: String) {
+        val db = Firebase.firestore
+        db.collection("deudores").get().addOnSuccessListener { result ->
+            var debtorEsxist = false
+            for (document in result) {
+                val debtor: DebtorServer = document.toObject<DebtorServer>()
+                if (name == debtor.name) {
+                    debtorEsxist = true
+                    with(binding) {
+                        searchPhoneTxVw.text = getString(R.string.phone_value, debtor.phone)
+                        searchDebtTxVw.text = getString(R.string.debt_values, debtor.debt.toString())
+                    }
+                }
+            }
+            if(!debtorEsxist){
+                Toast.makeText(requireContext(), "El deudor no existe", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     // función leer deudores
